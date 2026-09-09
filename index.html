@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WikES Toolkit — Documentation & Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+            },
+            accent: {
+              50: '#f0f9ff',
+              500: '#0284c7',
+              600: '#0369a1',
+            }
+          },
+          fontFamily: {
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(156, 163, 175, 0.4);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(156, 163, 175, 0.7);
+    }
+    .code-block {
+      position: relative;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand & Version -->
+      <div class="flex items-center gap-3">
+        <button id="mobile-menu-btn" class="lg:hidden p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <a href="#" class="flex items-center gap-2 font-bold text-xl tracking-tight text-slate-900 dark:text-white">
+          <span class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-mono shadow-sm">W</span>
+          <span>WikES<span class="text-emerald-600 dark:text-emerald-400 font-medium">Toolkit</span></span>
+        </a>
+        <span class="hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300">
+          v1.0.5
+        </span>
+      </div>
+
+      <!-- Quick Search Bar -->
+      <div class="flex-1 max-w-md mx-6 hidden md:block">
+        <div class="relative">
+          <svg class="absolute left-3 top-2.5 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input 
+            type="text" 
+            id="docSearch" 
+            placeholder="Search classes, methods, datasets (e.g., f1_score, PandasWikESGraph)..." 
+            class="w-full pl-9 pr-4 py-1.5 text-sm bg-slate-100 dark:bg-slate-800/80 border border-transparent focus:border-emerald-500 rounded-lg focus:outline-none transition-colors"
+            oninput="handleSearch(this.value)"
+          />
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-2 sm:gap-4">
+        <a href="#playground" class="text-xs sm:text-sm font-medium px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 hover:bg-emerald-100 transition-colors">
+          ⚡ Interactive Playground
+        </a>
+        <button id="themeToggle" class="p-2 rounded-lg text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Toggle Theme">
+          <svg id="sunIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <svg id="moonIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        </button>
+        <a href="https://github.com/msorkhpar/wiki-entity-summarization-toolkit" target="_blank" rel="noreferrer" class="p-2 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white" title="GitHub Repo">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-8">
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside id="sidebar" class="hidden lg:block w-64 shrink-0 py-8 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto pr-4 text-sm border-r border-slate-200 dark:border-slate-800">
+      <nav class="space-y-6">
+        <div>
+          <p class="font-semibold text-xs tracking-wider uppercase text-slate-400 dark:text-slate-500 mb-2">Getting Started</p>
+          <ul class="space-y-1.5 border-l-2 border-slate-200 dark:border-slate-800">
+            <li><a href="#overview" class="block pl-3 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 border-l-2 -ml-0.5 border-transparent hover:border-emerald-600">Overview & Motivation</a></li>
+            <li><a href="#installation" class="block pl-3 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 border-l-2 -ml-0.5 border-transparent hover:border-emerald-600">Installation</a></li>
+            <li><a href="#quickstart" class="block pl-3 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 border-l-2 -ml-0.5 border-transparent hover:border-emerald-600">5-Minute Quickstart</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="font-semibold text-xs tracking-wider uppercase text-slate-400 dark:text-slate-500 mb-2">Architectures & Engines</p>
+          <ul class="space-y-1.5 border-l-2 border-slate-200 dark:border-slate-800">
+            <li><a href="#engine-oop" class="block pl-3 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 border-l-2 -ml-0.5 border-transparent hover:border-emerald-600">OOP NetworkX Engine</a></li>
+            <li><a href="#engine-pandas" class="block pl-3 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 border-l-2 -ml-0.5 border-transparent hover:border-emerald-600">Vectorized Pandas Engine</a></li>
+            <li><a href="#esbm-support" class="block pl-3 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 border-l-2 -ml-0.5 border-transparent hover:border-emerald-600">ESBM & Legacy Support</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="font-semibold text-xs tracking-wider uppercase text-slate-400 dark:text-slate-500 mb-2">Datasets & Benchmarks</p>
+          <ul class="space-y-1.5 border-l-2 border-slate-200 dark:border-slate-800">
+            <li><a href="#datasets-wikes" class="block pl-3 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 border-l-2 -ml-0.5 border-transparent hover:border-emerald-600">WikES Suite (12 Graphs)</a></li>
+            <li><a href="#datasets-stats" class="block pl-3 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 border-l-2 -ml-0.5 border-transparent hover:border-emerald-600">Statistics vs ESBM/FACES</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="font-semibold text-xs tracking-wider uppercase text-slate-400 dark:text-slate-500 mb-2">Example Use Cases</p>
+          <ul class="space-y-1.5 border-l-2 border-slate-200 dark:border-slate-800">
+            <li><a href="#usecase-1" class="block pl-3 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 border-l-2 -ml-0.5 border-transparent hover:border-emerald-600">1. Graph Algorithm Evaluation</a></li>
+            <li><a href="#usecase-2" class="block pl-3 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 border-l-2 -ml-0.5 border-transparent hover:border-emerald-600">2. Vectorized Pandas & CSV Export</a></li>
+            <li><a href="#usecase-3" class="block pl-3 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 border-l-2 -ml-0.5 border-transparent hover:border-emerald-600">3. Cross-Benchmark on ESBM</a></li>
+            <li><a href="#usecase-4" class="block pl-3 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 border-l-2 -ml-0.5 border-transparent hover:border-emerald-600">4. Embedding/Semantic Selector</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="font-semibold text-xs tracking-wider uppercase text-slate-400 dark:text-slate-500 mb-2">Live Demo & Tools</p>
+          <ul class="space-y-1.5 border-l-2 border-slate-200 dark:border-slate-800">
+            <li><a href="#playground" class="block pl-3 text-emerald-600 dark:text-emerald-400 font-medium border-l-2 -ml-0.5 border-emerald-600">Interactive Metric Simulator</a></li>
+            <li><a href="#api-reference" class="block pl-3 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 border-l-2 -ml-0.5 border-transparent hover:border-emerald-600">API Reference</a></li>
+            <li><a href="#citation" class="block pl-3 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 border-l-2 -ml-0.5 border-transparent hover:border-emerald-600">Citation & Academic Reference</a></li>
+          </ul>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 py-8 max-w-4xl min-w-0">
+
+      <!-- HERO SECTION -->
+      <section class="mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 mb-4">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          SIGIR 2025 Reproducibility Track &bull; arXiv:2406.08435
+        </div>
+        <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-4">
+          Wiki-Entity-Summarization <span class="text-emerald-600 dark:text-emerald-400">Toolkit</span>
+        </h1>
+        <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+          A high-performance Python framework for loading, querying, benchmarking, and evaluating Knowledge Graph entity summarization algorithms across the <strong class="text-slate-900 dark:text-white">WikES</strong> and <strong class="text-slate-900 dark:text-white">ESBM</strong> benchmarks.
+        </p>
+
+        <!-- Quick Install Banner -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-2 bg-slate-900 text-slate-100 rounded-xl shadow-lg border border-slate-800 font-mono text-sm">
+          <span class="pl-3 text-emerald-400 select-none">$</span>
+          <code class="flex-1 overflow-x-auto py-1">pip install wikes-toolkit</code>
+          <button onclick="copyToClipboard('pip install wikes-toolkit', this)" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white rounded-lg text-xs font-semibold uppercase tracking-wider transition-colors flex items-center justify-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            <span>Copy</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- OVERVIEW & MOTIVATION -->
+      <section id="overview" class="mb-14 scroll-mt-20">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2">
+          <span>1. Overview & Theoretical Context</span>
+        </h2>
+        <p class="text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+          Knowledge Graphs (KGs) such as Wikidata and DBpedia contain millions of entities and billions of relationships. An entity’s description—defined as all triples involving that node in its $t$-hop neighborhood $\Delta_t(v)$—often contains hundreds of edges, overwhelming downstream systems and human interfaces.
+        </p>
+        <div class="p-4 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 mb-6">
+          <p class="font-semibold text-slate-900 dark:text-slate-100 text-sm mb-1">Mathematical Formulation of Entity Summarization (ES):</p>
+          <p class="text-sm text-slate-700 dark:text-slate-300 font-mono">
+            argmax<sub>S(v) ⊆ Δ<sub>t</sub>(v), |S(v)| = k</sub> score(S(v))
+          </p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">
+            The goal is to select an optimal, compact, size-constrained summary $S(v)$ of $k$ salient triples from the neighborhood $\Delta_t(v)$.
+          </p>
+        </div>
+
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-3">Why WikES? Moving Beyond Prior Benchmarks</h3>
+        <p class="text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+          Prior benchmarks (e.g., <strong>ESBM</strong> with 175 entities, <strong>FACES</strong> with 50 entities, and <strong>INFO</strong>) rely on small-scale, expensive manual annotations that introduce severe annotator frequency bias. WikES systematically solves this:
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <div class="p-4 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="text-emerald-600 dark:text-emerald-400 font-bold text-lg mb-1">Wikipedia Ground Truth</div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Ground-truth summaries are derived from collaborative Wikipedia abstracts & infoboxes via DistilBERT disambiguation, eliminating manual annotator bias.
+            </p>
+          </div>
+          <div class="p-4 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="text-emerald-600 dark:text-emerald-400 font-bold text-lg mb-1">2-Hop Topology Preservation</div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Uses degree-conserving Random Walk sampling to preserve real-world graph topologies, retaining natural density and inter-entity connectivity.
+            </p>
+          </div>
+          <div class="p-4 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="text-emerald-600 dark:text-emerald-400 font-bold text-lg mb-1">Scale: 100k+ Nodes</div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Expands evaluation from a trivial hundred nodes to over 248,000 entities and 460,000 directed edges across 4 major domains.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- INSTALLATION -->
+      <section id="installation" class="mb-14 scroll-mt-20">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+          2. Installation & Requirements
+        </h2>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          <code class="font-mono text-emerald-600 dark:text-emerald-400">wikes-toolkit</code> requires Python 3.8+ and is packaged on PyPI with dependencies on <code class="font-mono text-xs">networkx</code>, <code class="font-mono text-xs">pandas</code>, <code class="font-mono text-xs">numpy</code>, and <code class="font-mono text-xs">requests</code>.
+        </p>
+
+        <div class="space-y-4">
+          <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
+            <div class="px-4 py-2 bg-slate-800/60 text-xs font-mono text-slate-400 flex items-center justify-between">
+              <span>Standard Installation</span>
+              <span>Bash</span>
+            </div>
+            <pre class="p-4 text-emerald-300 font-mono text-sm overflow-x-auto"><code>pip install wikes-toolkit</code></pre>
+          </div>
+
+          <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
+            <div class="px-4 py-2 bg-slate-800/60 text-xs font-mono text-slate-400 flex items-center justify-between">
+              <span>Development / Editable Installation</span>
+              <span>Git</span>
+            </div>
+            <pre class="p-4 text-emerald-300 font-mono text-sm overflow-x-auto"><code>git clone https://github.com/msorkhpar/wiki-entity-summarization-toolkit.git
+cd wiki-entity-summarization-toolkit
+pip install -e .</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5-MINUTE QUICKSTART -->
+      <section id="quickstart" class="mb-14 scroll-mt-20">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+          3. Five-Minute Quickstart
+        </h2>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">
+          Load a WikES graph (e.g., <code class="font-mono text-xs">WikiCinema.SMALL</code>), inspect target entities and ground truths, mark candidate summaries, and compute standard metrics ($F_1@5$, $F_1@10$, and $MAP$):
+        </p>
+
+        <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-800 mb-6">
+          <div class="px-4 py-2 bg-slate-800/70 text-xs font-mono text-slate-400 flex items-center justify-between border-b border-slate-800">
+            <span class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              quickstart_wikes.py
+            </span>
+            <button onclick="copyCodeBlock('code-quickstart', this)" class="hover:text-white transition-colors text-xs flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              <span>Copy code</span>
+            </button>
+          </div>
+          <pre id="code-quickstart" class="p-4 text-slate-100 font-mono text-sm leading-relaxed overflow-x-auto"><code><span class="text-purple-400">from</span> wikes_toolkit <span class="text-purple-400">import</span> WikESToolkit, WikESVersions, WikESGraph
+
+<span class="text-slate-500"># 1. Initialize toolkit (auto-caches data in save_path)</span>
+toolkit = WikESToolkit(save_path=<span class="text-emerald-300">"./data"</span>)
+
+<span class="text-slate-500"># 2. Load graph with custom human-readable formatters</span>
+G = toolkit.load_graph(
+    WikESGraph,
+    WikESVersions.V1.WikiCinema.SMALL,
+    entity_formatter=<span class="text-purple-400">lambda</span> e: <span class="text-emerald-300">f"Entity({e.wikidata_label})"</span>,
+    predicate_formatter=<span class="text-purple-400">lambda</span> p: <span class="text-emerald-300">f"Predicate({p.label})"</span>,
+    triple_formatter=<span class="text-purple-400">lambda</span> t: <span class="text-emerald-300">f"({t.subject_entity.wikidata_label})-[{t.predicate.label}]->({t.object_entity.wikidata_label})"</span>
+)
+
+<span class="text-slate-500"># 3. Explore topology and target entities</span>
+print(<span class="text-emerald-300">f"Total Entities: {G.total_entities()} | Triples: {G.total_triples()}"</span>)
+root_nodes = G.root_entities()
+sample_target = root_nodes[<span class="text-amber-300">0</span>]  <span class="text-slate-500"># e.g., Elvis Presley (Q303)</span>
+
+print(<span class="text-emerald-300">f"Ground-truth summaries for {sample_target}:"</span>)
+<span class="text-purple-400">for</span> gt_triple <span class="text-purple-400">in</span> G.ground_truths(sample_target):
+    print(<span class="text-emerald-300">f"  ✔ {gt_triple}"</span>)
+
+<span class="text-slate-500"># 4. Predict / Mark summaries using your summarization algorithm</span>
+<span class="text-slate-500"># (Here marking the first 5 neighbor triples as predicted summary)</span>
+predicted_triples = G.neighbors(sample_target)[:<span class="text-amber-300">5</span>]
+G.mark_triples_as_summaries(sample_target, predicted_triples)
+
+<span class="text-slate-500"># 5. Evaluate benchmark metrics</span>
+print(<span class="text-emerald-300">"--- Benchmark Evaluation Results ---"</span>)
+print(<span class="text-emerald-300">f"F1@5   : {G.f1_score(5):.4f}"</span>)
+print(<span class="text-emerald-300">f"F1@10  : {G.f1_score(10):.4f}"</span>)
+print(<span class="text-emerald-300">f"F1-Dyn : {G.f1_score():.4f}"</span>)
+print(<span class="text-emerald-300">f"MAP@5  : {G.map_score(5):.4f}"</span>)</code></pre>
+        </div>
+      </section>
+
+      <!-- ARCHITECTURES & ENGINES -->
+      <section id="engine-oop" class="mb-14 scroll-mt-20">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+          4. Dual-Engine Architecture: OOP vs. Pandas
+        </h2>
+        <p class="text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+          <code class="font-mono text-emerald-600 dark:text-emerald-400">wikes-toolkit</code> provides two execution models to balance deep graph traversal against fast tabular processing:
+        </p>
+
+        <!-- Comparison Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div class="p-5 rounded-xl border border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/40 dark:bg-emerald-950/20">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="font-bold text-lg text-emerald-900 dark:text-emerald-200">1. NetworkX OOP Engine</h3>
+              <span class="text-xs font-mono px-2 py-0.5 rounded bg-emerald-200 dark:bg-emerald-800 text-emerald-900 dark:text-emerald-100">WikESGraph</span>
+            </div>
+            <p class="text-sm text-slate-700 dark:text-slate-300 mb-3">
+              Underpinned by <code class="font-mono text-xs">G._G</code> (NetworkX MultiDiGraph). Returns rich Python objects (<code class="font-mono text-xs">Entity</code>, <code class="font-mono text-xs">Predicate</code>, <code class="font-mono text-xs">Triple</code>).
+            </p>
+            <ul class="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 list-disc pl-4">
+              <li>Direct access to graph-theoretic algorithms (Centrality, PageRank, Random Walks).</li>
+              <li>Intuitive formatting lambdas for entity names and triples.</li>
+              <li>Native 2-hop neighborhood traversals.</li>
+            </ul>
+          </div>
+
+          <div class="p-5 rounded-xl border border-sky-300 dark:border-sky-800/80 bg-sky-50/40 dark:bg-sky-950/20">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="font-bold text-lg text-sky-900 dark:text-sky-200">2. Vectorized Pandas Engine</h3>
+              <span class="text-xs font-mono px-2 py-0.5 rounded bg-sky-200 dark:bg-sky-800 text-sky-900 dark:text-sky-100">PandasWikESGraph</span>
+            </div>
+            <p class="text-sm text-slate-700 dark:text-slate-300 mb-3">
+              Underpinned by memory-mapped Pandas DataFrames (<code class="font-mono text-xs">subject</code>, <code class="font-mono text-xs">predicate</code>, <code class="font-mono text-xs">object</code> columns).
+            </p>
+            <ul class="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 list-disc pl-4">
+              <li>Vectorized queries, slicing, and batch-ranking operations.</li>
+              <li>Direct export to CSV via <code class="font-mono text-xs">G.export_as_csv()</code> for external ML training.</li>
+              <li>Substantially lower memory overhead on 200k+ edge graphs.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ESBM Support Subsection -->
+        <div id="esbm-support" class="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <h3 class="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 text-xs font-mono">Legacy Support</span>
+            ESBM & ESBM+ Benchmark Integration
+          </h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
+            The toolkit includes complete backwards-compatible support for ESBM (Entity Summarization Benchmark) v1.2 and ESBM+, including DBpedia and LinkedMDB (LMDB) splits. You can load these via <code class="font-mono text-xs text-emerald-600 dark:text-emerald-400">ESBMGraph</code> and evaluate traditional ranked <code class="font-mono text-xs">.nt</code> files using <code class="font-mono text-xs">mark_nt_file_as_summary()</code>.
+          </p>
+        </div>
+      </section>
+
+      <!-- DATASETS & BENCHMARKS -->
+      <section id="datasets-wikes" class="mb-14 scroll-mt-20">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+          5. Datasets: WikES vs. Traditional Baselines
+        </h2>
+        <p class="text-slate-600 dark:text-slate-300 mb-6">
+          WikES provides 12 distinct datasets divided across 4 distinct domains, generated with connected random walks that preserve authentic degree distributions:
+        </p>
+
+        <!-- Benchmark Table -->
+        <div id="datasets-stats" class="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-xl mb-6 shadow-sm">
+          <table class="w-full text-left text-xs sm:text-sm">
+            <thead class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold border-b border-slate-200 dark:border-slate-800">
+              <tr>
+                <th class="p-3">Dataset</th>
+                <th class="p-3">Domain Focus</th>
+                <th class="p-3">Size Variant</th>
+                <th class="p-3">Entities (|V|)</th>
+                <th class="p-3">Triples (|E|)</th>
+                <th class="p-3">Target GTs</th>
+                <th class="p-3">Max Degree</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800 font-mono text-slate-600 dark:text-slate-300">
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td class="p-3 font-semibold text-emerald-600 dark:text-emerald-400">WikiLitArt</td>
+                <td class="p-3 font-sans">Literature, Arts, Writers</td>
+                <td class="p-3">Small / Med / Lrg</td>
+                <td class="p-3">85k &rarr; 239k</td>
+                <td class="p-3">136k &rarr; 466k</td>
+                <td class="p-3">494</td>
+                <td class="p-3">8,599</td>
+              </tr>
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td class="p-3 font-semibold text-emerald-600 dark:text-emerald-400">WikiCinema</td>
+                <td class="p-3 font-sans">Films, Actors, Directors</td>
+                <td class="p-3">Small / Med / Lrg</td>
+                <td class="p-3">70k &rarr; 185k</td>
+                <td class="p-3">126k &rarr; 397k</td>
+                <td class="p-3">493</td>
+                <td class="p-3">12,189</td>
+              </tr>
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td class="p-3 font-semibold text-emerald-600 dark:text-emerald-400">WikiPro</td>
+                <td class="p-3 font-sans">Politicians, Athletes, Singers</td>
+                <td class="p-3">Small / Med / Lrg</td>
+                <td class="p-3">79k &rarr; 230k</td>
+                <td class="p-3">125k &rarr; 412k</td>
+                <td class="p-3">493</td>
+                <td class="p-3">7,741</td>
+              </tr>
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td class="p-3 font-semibold text-emerald-600 dark:text-emerald-400">WikiProFem</td>
+                <td class="p-3 font-sans">Female Notable Professionals</td>
+                <td class="p-3">Small / Med / Lrg</td>
+                <td class="p-3">79k &rarr; 248k</td>
+                <td class="p-3">123k &rarr; 413k</td>
+                <td class="p-3">468</td>
+                <td class="p-3">12,939</td>
+              </tr>
+              <tr class="bg-slate-50/70 dark:bg-slate-900/70 text-slate-400">
+                <td class="p-3 font-sans italic text-slate-500">ESBM (DBpedia)</td>
+                <td class="p-3 font-sans">General Web of Data</td>
+                <td class="p-3">Fixed (v1.2)</td>
+                <td class="p-3">2,721</td>
+                <td class="p-3">4,436</td>
+                <td class="p-3">125</td>
+                <td class="p-3">125</td>
+              </tr>
+              <tr class="bg-slate-50/70 dark:bg-slate-900/70 text-slate-400">
+                <td class="p-3 font-sans italic text-slate-500">FACES (DBpedia)</td>
+                <td class="p-3 font-sans">Diverse Classes</td>
+                <td class="p-3">Fixed</td>
+                <td class="p-3">1,379</td>
+                <td class="p-3">2,152</td>
+                <td class="p-3">50</td>
+                <td class="p-3">88</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- USE CASES SECTION -->
+      <section class="mb-14 scroll-mt-20">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 pb-2 border-b border-slate-200 dark:border-slate-800">
+          6. Real-World Use Cases & Cookbooks
+        </h2>
+
+        <!-- Use Case 1 -->
+        <div id="usecase-1" class="mb-10">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-900/70 text-emerald-800 dark:text-emerald-300">Use Case 1</span>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Benchmarking a Custom Centrality / Link Analysis Algorithm</h3>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mb-3">
+            In entity summarization, link-based methods (e.g., PageRank, RELIN, LinkSum) rank candidate triples based on node authority. Here is how you can use the internal NetworkX graph <code class="font-mono text-xs">G._G</code> to run PageRank and automatically evaluate against ground truth:
+          </p>
+
+          <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
+            <div class="px-4 py-2 bg-slate-800/70 text-xs font-mono text-slate-400 flex justify-between items-center">
+              <span>custom_pagerank_eval.py</span>
+              <button onclick="copyCodeBlock('code-uc1', this)" class="hover:text-white text-xs">Copy</button>
+            </div>
+            <pre id="code-uc1" class="p-4 text-slate-100 font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed"><code><span class="text-purple-400">import</span> networkx <span class="text-purple-400">as</span> nx
+<span class="text-purple-400">from</span> wikes_toolkit <span class="text-purple-400">import</span> WikESToolkit, WikESVersions, WikESGraph
+
+<span class="text-slate-500"># 1. Load WikES Cinema Graph</span>
+toolkit = WikESToolkit(save_path=<span class="text-emerald-300">"./data"</span>)
+G = toolkit.load_graph(WikESGraph, WikESVersions.V1.WikiCinema.SMALL)
+
+<span class="text-slate-500"># 2. Compute PageRank over the underlying NetworkX MultiDiGraph</span>
+print(<span class="text-emerald-300">"Computing graph-wide PageRank..."</span>)
+nx_graph = G._G
+scores = nx.pagerank(nx_graph, alpha=<span class="text-amber-300">0.85</span>, max_iter=<span class="text-amber-300">100</span>)
+
+<span class="text-slate-500"># 3. For every target entity, rank neighbor triples by object node importance</span>
+<span class="text-purple-400">for</span> target_entity <span class="text-purple-400">in</span> G.root_entities():
+    candidate_triples = G.neighbors(target_entity)
+    <span class="text-purple-400">if not</span> candidate_triples:
+        <span class="text-purple-400">continue</span>
+    
+    <span class="text-slate-500"># Rank triples by the PageRank score of their object entity</span>
+    ranked_triples = sorted(
+        candidate_triples,
+        key=<span class="text-purple-400">lambda</span> t: scores.get(t.object_entity.identifier, <span class="text-amber-300">0.0</span>),
+        reverse=<span class="text-purple-400">True</span>
+    )
+    
+    <span class="text-slate-500"># Select top-10 candidates as predicted summary</span>
+    top_summary = ranked_triples[:<span class="text-amber-300">10</span>]
+    G.mark_triples_as_summaries(target_entity, top_summary)
+
+<span class="text-slate-500"># 4. Global benchmark evaluation</span>
+print(<span class="text-emerald-300">f"Results for PageRank baseline on WikiCinema.SMALL:"</span>)
+print(<span class="text-emerald-300">f"  F1@5   : {G.f1_score(5):.4f}"</span>)
+print(<span class="text-emerald-300">f"  F1@10  : {G.f1_score(10):.4f}"</span>)
+print(<span class="text-emerald-300">f"  MAP@10 : {G.map_score(10):.4f}"</span>)</code></pre>
+          </div>
+        </div>
+
+        <!-- Use Case 2 -->
+        <div id="usecase-2" class="mb-10">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-100 dark:bg-sky-900/70 text-sky-800 dark:text-sky-300">Use Case 2</span>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">High-Throughput Vectorized Analysis & CSV Dataset Export</h3>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mb-3">
+            For large-scale GNN preprocessing or LLM fine-tuning pipelines, you can batch iterate through all datasets in a family and export them as tabular CSV edge lists:
+          </p>
+
+          <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
+            <div class="px-4 py-2 bg-slate-800/70 text-xs font-mono text-slate-400 flex justify-between items-center">
+              <span>export_datasets_pandas.py</span>
+              <button onclick="copyCodeBlock('code-uc2', this)" class="hover:text-white text-xs">Copy</button>
+            </div>
+            <pre id="code-uc2" class="p-4 text-slate-100 font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed"><code><span class="text-purple-400">from</span> wikes_toolkit <span class="text-purple-400">import</span> WikESToolkit, WikESVersions, PandasWikESGraph
+
+toolkit = WikESToolkit(save_path=<span class="text-emerald-300">"./data"</span>)
+
+<span class="text-slate-500"># Iterate across all 4 benchmark suites in V1 (LitArt, Cinema, Pro, ProFem)</span>
+<span class="text-purple-400">for</span> dataset_name, G <span class="text-purple-400">in</span> toolkit.load_all_graphs(PandasWikESGraph, WikESVersions.V1):
+    print(<span class="text-emerald-300">f"\nProcessing Suite: {dataset_name}"</span>)
+    print(<span class="text-emerald-300">f"  Total Entities : {G.total_entities():,}"</span>)
+    print(<span class="text-emerald-300">f"  Total Triples  : {G.total_triples():,}"</span>)
+    
+    <span class="text-slate-500"># Fast vectorized predicate distribution via Pandas</span>
+    df_triples = G.triples()
+    top_predicates = df_triples[<span class="text-emerald-300">'predicate'</span>].value_counts().head(<span class="text-amber-300">3</span>)
+    print(<span class="text-emerald-300">f"  Top 3 Predicates:\n{top_predicates}"</span>)
+    
+    <span class="text-slate-500"># Export graph as normalized CSV files (entities.csv, triples.csv, summaries.csv)</span>
+    export_directory = <span class="text-emerald-300">f"./exports/{dataset_name}"</span>
+    G.export_as_csv(export_directory)
+    print(<span class="text-emerald-300">f"  ✔ Exported cleanly to {export_directory}"</span>)</code></pre>
+          </div>
+        </div>
+
+        <!-- Use Case 3 -->
+        <div id="usecase-3" class="mb-10">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-900/70 text-amber-800 dark:text-amber-300">Use Case 3</span>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Comparative Evaluation on ESBM (DBpedia & LMDB)</h3>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mb-3">
+            Run side-by-side evaluation against the historic ESBM benchmark with multi-annotator gold rankings (e.g. <code class="font-mono text-xs">gold_top_5</code> and <code class="font-mono text-xs">gold_top_10</code>):
+          </p>
+
+          <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
+            <div class="px-4 py-2 bg-slate-800/70 text-xs font-mono text-slate-400 flex justify-between items-center">
+              <span>esbm_benchmark_runner.py</span>
+              <button onclick="copyCodeBlock('code-uc3', this)" class="hover:text-white text-xs">Copy</button>
+            </div>
+            <pre id="code-uc3" class="p-4 text-slate-100 font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed"><code><span class="text-purple-400">from</span> wikes_toolkit <span class="text-purple-400">import</span> WikESToolkit, ESBMGraph, ESBMVersions
+
+toolkit = WikESToolkit()
+G = toolkit.load_graph(
+    ESBMGraph,
+    ESBMVersions.Plus.DBPEDIA_FULL,
+    entity_formatter=<span class="text-purple-400">lambda</span> e: e.identifier
+)
+
+target = <span class="text-emerald-300">"http://dbpedia.org/resource/Adrian_Griffin"</span>
+print(<span class="text-emerald-300">f"Evaluating ESBM Target: {target}"</span>)
+print(<span class="text-emerald-300">f"Node degree: {G.degree(target)}"</span>)
+
+<span class="text-slate-500"># ESBM provides consensus ground truth annotations across multiple human judges</span>
+annotator_0_top5 = G.gold_top_5(target, annotator_index=<span class="text-amber-300">0</span>)
+print(<span class="text-emerald-300">f"Annotator 0 marked {len(annotator_0_top5)} salient triples for top-5"</span>)
+
+<span class="text-slate-500"># Mark candidate triples predicted by your model</span>
+model_selected_triples = [
+    (target, <span class="text-emerald-300">'http://dbpedia.org/ontology/birthDate'</span>, <span class="text-emerald-300">'1974-07-04'</span>),
+    (target, <span class="text-emerald-300">'http://dbpedia.org/ontology/team'</span>, <span class="text-emerald-300">'http://dbpedia.org/resource/Orlando_Magic'</span>),
+    (target, <span class="text-emerald-300">'http://dbpedia.org/ontology/activeYearsEndYear'</span>, <span class="text-emerald-300">'2008'</span>)
+]
+G.mark_triples_as_summaries(target, model_selected_triples)
+
+<span class="text-slate-500"># Evaluate against all benchmark annotators</span>
+print(<span class="text-emerald-300">f"ESBM F1@5: {G.f1_score(5):.4f} | MAP@5: {G.map_score(5):.4f}"</span>)</code></pre>
+          </div>
+        </div>
+
+        <!-- Use Case 4 -->
+        <div id="usecase-4" class="mb-10">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-100 dark:bg-purple-900/70 text-purple-800 dark:text-purple-300">Use Case 4</span>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Neural / LLM-Based Zero-Shot Summarization Pipeline</h3>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mb-3">
+            Build a modern semantic summarization workflow using sentence embeddings to rank relationship labels directly against an entity's Wikipedia-style contextual prompt:
+          </p>
+
+          <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
+            <div class="px-4 py-2 bg-slate-800/70 text-xs font-mono text-slate-400 flex justify-between items-center">
+              <span>semantic_embedding_summarizer.py</span>
+              <button onclick="copyCodeBlock('code-uc4', this)" class="hover:text-white text-xs">Copy</button>
+            </div>
+            <pre id="code-uc4" class="p-4 text-slate-100 font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed"><code><span class="text-purple-400">from</span> wikes_toolkit <span class="text-purple-400">import</span> WikESToolkit, WikESVersions, WikESGraph
+<span class="text-purple-400">import</span> numpy <span class="text-purple-400">as</span> np
+
+<span class="text-slate-500"># Mock semantic embedding function (in practice: SentenceTransformers / Ollama / OpenAI)</span>
+<span class="text-purple-400">def</span> <span class="text-yellow-300">get_embedding</span>(text: str) -> np.ndarray:
+    rng = np.random.default_rng(seed=abs(hash(text)) % <span class="text-amber-300">100000</span>)
+    vec = rng.normal(size=<span class="text-amber-300">384</span>)
+    <span class="text-purple-400">return</span> vec / np.linalg.norm(vec)
+
+toolkit = WikESToolkit()
+G = toolkit.load_graph(WikESGraph, WikESVersions.V1.WikiLitArt.SMALL)
+
+<span class="text-purple-400">for</span> target <span class="text-purple-400">in</span> G.root_entities()[:<span class="text-amber-300">5</span>]:
+    target_name = target.wikidata_label
+    context_query = <span class="text-emerald-300">f"Key biographical facts, major literary works, and awards of {target_name}"</span>
+    query_emb = get_embedding(context_query)
+    
+    scored_triples = []
+    <span class="text-purple-400">for</span> triple <span class="text-purple-400">in</span> G.neighbors(target):
+        triple_repr = <span class="text-emerald-300">f"{triple.subject_entity.wikidata_label} {triple.predicate.label} {triple.object_entity.wikidata_label}"</span>
+        triple_emb = get_embedding(triple_repr)
+        sim = float(np.dot(query_emb, triple_emb))
+        scored_triples.append((sim, triple))
+        
+    scored_triples.sort(key=<span class="text-purple-400">lambda</span> x: x[<span class="text-amber-300">0</span>], reverse=<span class="text-purple-400">True</span>)
+    top_5 = [item[<span class="text-amber-300">1</span>] <span class="text-purple-400">for</span> item <span class="text-purple-400">in</span> scored_triples[:<span class="text-amber-300">5</span>]]
+    G.mark_triples_as_summaries(target, top_5)
+
+print(<span class="text-emerald-300">f"Semantic Ranker F1@5: {G.f1_score(5):.4f} | MAP@5: {G.map_score(5):.4f}"</span>)</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- INTERACTIVE METRIC SIMULATOR / PLAYGROUND -->
+      <section id="playground" class="mb-14 scroll-mt-20">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2 pb-2 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+          <span>7. Interactive Benchmark Playground</span>
+          <span class="text-xs font-normal px-2.5 py-1 rounded bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">Live Client-Side Evaluator</span>
+        </h2>
+        <p class="text-slate-600 dark:text-slate-300 text-sm mb-4">
+          Experiment with how <code class="font-mono text-emerald-600 dark:text-emerald-400">wikes-toolkit</code> computes precision, recall, $F_1$, and Mean Average Precision ($MAP$). Select candidate triples for the entity <strong class="text-slate-900 dark:text-white">Elvis Presley (Q303)</strong> to see the real-time score updates:
+        </p>
+
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md">
+          
+          <!-- Top Row: Entity Info & Live Metrics -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+            <div class="md:col-span-1">
+              <span class="text-xs uppercase font-mono tracking-wider text-slate-400">Target Entity</span>
+              <p class="text-lg font-bold text-slate-900 dark:text-white">Elvis Presley</p>
+              <p class="text-xs font-mono text-emerald-600 dark:text-emerald-400">Wikidata: Q303</p>
+              <p class="text-xs text-slate-500 mt-1">Ground Truth Triples: <span class="font-bold text-slate-800 dark:text-slate-200" id="gt-count">5</span></p>
+            </div>
+
+            <!-- Metrics Gauges -->
+            <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60">
+              <span class="text-xs text-slate-500 dark:text-slate-400 mb-1">Precision</span>
+              <span id="metric-precision" class="text-2xl font-black text-slate-900 dark:text-white font-mono">0.00%</span>
+            </div>
+
+            <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60">
+              <span class="text-xs text-slate-500 dark:text-slate-400 mb-1">Recall</span>
+              <span id="metric-recall" class="text-2xl font-black text-slate-900 dark:text-white font-mono">0.00%</span>
+            </div>
+
+            <div class="flex flex-col items-center justify-center p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-300 dark:border-emerald-800">
+              <span class="text-xs text-emerald-700 dark:text-emerald-400 font-semibold mb-1">F1-Score / MAP</span>
+              <div class="flex items-baseline gap-2">
+                <span id="metric-f1" class="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">0.00</span>
+                <span class="text-xs text-slate-400">/</span>
+                <span id="metric-map" class="text-sm font-bold text-slate-700 dark:text-slate-300 font-mono">0.00</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Triple Selection List -->
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">Candidate 1-Hop & 2-Hop Triples (Click to Mark as Summary):</p>
+              <div class="flex gap-2 text-xs">
+                <button onclick="selectPreset('all-gt')" class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">Select Perfect GT</button>
+                <button onclick="selectPreset('random')" class="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">Random 4</button>
+                <button onclick="selectPreset('clear')" class="px-2.5 py-1 rounded bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 hover:bg-rose-100 transition-colors">Clear</button>
+              </div>
+            </div>
+
+            <div class="space-y-2 font-mono text-xs" id="triples-container">
+              <!-- Dynamically populated via script -->
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
+            <span>Selected summary length (|S<sub>m</sub>|): <strong id="selected-count" class="text-slate-800 dark:text-slate-200">0</strong> triples</span>
+            <span><span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 mr-1"></span> = Matches Wikipedia Abstract Ground Truth</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- API REFERENCE -->
+      <section id="api-reference" class="mb-14 scroll-mt-20">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 pb-2 border-b border-slate-200 dark:border-slate-800">
+          8. Comprehensive API Reference
+        </h2>
+
+        <!-- WikESToolkit Class -->
+        <div class="mb-8 p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white font-mono mb-2">
+            <span class="text-purple-600 dark:text-purple-400">class</span> WikESToolkit(save_path="./data")
+          </h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">
+            Primary entry point responsible for downloading, local caching, and instantiating graph representations.
+          </p>
+
+          <div class="space-y-3 font-mono text-xs">
+            <div class="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+              <span class="text-emerald-600 dark:text-emerald-400 font-bold">load_graph(graph_class, dataset_version, entity_formatter=None, predicate_formatter=None, triple_formatter=None)</span>
+              <p class="font-sans text-slate-600 dark:text-slate-300 mt-1">Loads and parses a single dataset variant. Returns an instance of <code class="font-mono">WikESGraph</code>, <code class="font-mono">PandasWikESGraph</code>, or <code class="font-mono">ESBMGraph</code>.</p>
+            </div>
+            <div class="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+              <span class="text-emerald-600 dark:text-emerald-400 font-bold">load_all_graphs(graph_class, version_family)</span>
+              <p class="font-sans text-slate-600 dark:text-slate-300 mt-1">Generator yielding tuples of <code class="font-mono">(dataset_name, G)</code> for each dataset within a version group (e.g. <code class="font-mono">WikESVersions.V1</code>).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- WikESGraph & PandasWikESGraph Methods -->
+        <div class="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white font-mono mb-3">
+            <span class="text-purple-600 dark:text-purple-400">methods</span> Graph Inspection & Evaluation
+          </h3>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono border-b border-slate-200 dark:border-slate-800">
+                <tr>
+                  <th class="p-2.5">Method Signature</th>
+                  <th class="p-2.5">Return Type</th>
+                  <th class="p-2.5">Description</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-slate-800 font-mono text-slate-600 dark:text-slate-300">
+                <tr>
+                  <td class="p-2.5 text-emerald-600 dark:text-emerald-400 font-bold">root_entities()</td>
+                  <td class="p-2.5">List[Entity] | Series</td>
+                  <td class="p-2.5 font-sans">Target entities with ground-truth summaries.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-emerald-600 dark:text-emerald-400 font-bold">neighbors(entity)</td>
+                  <td class="p-2.5">List[Triple] | DataFrame</td>
+                  <td class="p-2.5 font-sans">All incoming & outgoing triples connected to <code class="font-mono text-xs">entity</code>.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-emerald-600 dark:text-emerald-400 font-bold">ground_truths(entity)</td>
+                  <td class="p-2.5">List[Triple] | DataFrame</td>
+                  <td class="p-2.5 font-sans">Golden summary triples extracted from Wikipedia abstract.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-emerald-600 dark:text-emerald-400 font-bold">mark_triples_as_summaries(entity, triples)</td>
+                  <td class="p-2.5">None</td>
+                  <td class="p-2.5 font-sans">Stores model-predicted summary candidates for evaluation.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-emerald-600 dark:text-emerald-400 font-bold">clear_summaries()</td>
+                  <td class="p-2.5">None</td>
+                  <td class="p-2.5 font-sans">Flushes all currently marked predicted summaries.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-emerald-600 dark:text-emerald-400 font-bold">f1_score(k=None)</td>
+                  <td class="p-2.5">float</td>
+                  <td class="p-2.5 font-sans">Harmonic mean of precision and recall. If $k$ is omitted, dynamic summary length is computed.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-emerald-600 dark:text-emerald-400 font-bold">map_score(k=None, no_rel=False)</td>
+                  <td class="p-2.5">float</td>
+                  <td class="p-2.5 font-sans">Mean Average Precision for ranked evaluation. <code class="font-mono text-xs">no_rel=True</code> evaluates without edge relation matching.</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-emerald-600 dark:text-emerald-400 font-bold">export_as_csv(output_path)</td>
+                  <td class="p-2.5">None</td>
+                  <td class="p-2.5 font-sans">Exports entities, triples, and summaries as normalized CSVs (available on <code class="font-mono text-xs">PandasWikESGraph</code>).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- CITATION -->
+      <section id="citation" class="mb-14 scroll-mt-20">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+          9. Citation & Research Paper
+        </h2>
+        <p class="text-slate-600 dark:text-slate-300 text-sm mb-4">
+          If you use <code class="font-mono text-emerald-600 dark:text-emerald-400">wikes-toolkit</code> or the WikES dataset suite in your academic research, please cite the SIGIR 2025 reproducibility publication:
+        </p>
+
+        <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
+          <div class="px-4 py-2 bg-slate-800/70 text-xs font-mono text-slate-400 flex justify-between items-center">
+            <span>citation.bib</span>
+            <button onclick="copyCodeBlock('bibtex-code', this)" class="hover:text-white text-xs">Copy BibTeX</button>
+          </div>
+          <pre id="bibtex-code" class="p-4 text-emerald-300 font-mono text-xs leading-relaxed overflow-x-auto"><code>@inproceedings{moradan2025wikes,
+  title     = {WikES: A Large Dataset Suite and Generator for Entity Summarization in Knowledge Graphs},
+  author    = {Moradan, Atefeh and Javadi, Saeedeh and Sorkhpar, Mohammad and Zaporojets, Klim and Mottin, Davide and Assent, Ira},
+  booktitle = {Proceedings of the 48th International ACM SIGIR Conference on Research and Development in Information Retrieval (SIGIR 2025)},
+  year      = {2025},
+  publisher = {ACM}
+}</code></pre>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="pt-8 pb-12 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p>Released under the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" class="underline hover:text-emerald-500">Creative Commons CC-BY-4.0 License</a>.</p>
+        <p>Developed at Aarhus University, PoliTo, and Indiana State University.</p>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- CLIENT-SIDE SCRIPTING & PLAYGROUND LOGIC -->
+  <script>
+    // --- THEME SWITCHER ---
+    const html = document.documentElement;
+    const themeBtn = document.getElementById('themeToggle');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIcon = document.getElementById('moonIcon');
+
+    function updateTheme(dark) {
+      if (dark) {
+        html.classList.add('dark');
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        html.classList.remove('dark');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    const preferredTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    updateTheme(preferredTheme === 'dark');
+
+    themeBtn.addEventListener('click', () => {
+      updateTheme(!html.classList.contains('dark'));
+    });
+
+    // --- MOBILE MENU TOGGLE ---
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const sidebar = document.getElementById('sidebar');
+    mobileBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('hidden');
+      sidebar.classList.toggle('fixed');
+      sidebar.classList.toggle('bg-white');
+      sidebar.classList.toggle('dark:bg-slate-900');
+      sidebar.classList.toggle('z-50');
+      sidebar.classList.toggle('inset-0');
+      sidebar.classList.toggle('top-16');
+      sidebar.classList.toggle('p-6');
+    });
+
+    // --- COPY TO CLIPBOARD HELPER ---
+    function copyToClipboard(text, btn) {
+      navigator.clipboard.writeText(text).then(() => {
+        const original = btn.innerHTML;
+        btn.innerHTML = '<span>Copied!</span>';
+        setTimeout(() => { btn.innerHTML = original; }, 2000);
+      });
+    }
+
+    function copyCodeBlock(elementId, btn) {
+      const code = document.getElementById(elementId).innerText;
+      copyToClipboard(code, btn);
+    }
+
+    // --- SEARCH / FILTER SECTIONS ---
+    function handleSearch(term) {
+      const q = term.toLowerCase().trim();
+      const sections = document.querySelectorAll('main > section');
+      sections.forEach(sec => {
+        if (!q) {
+          sec.style.display = '';
+          return;
+        }
+        const text = sec.innerText.toLowerCase();
+        sec.style.display = text.includes(q) ? '' : 'none';
+      });
+    }
+
+    // --- INTERACTIVE METRIC SIMULATOR DATA ---
+    const sampleTriples = [
+      { id: 1, s: "Elvis Presley", p: "genre", o: "rockabilly", isGT: true },
+      { id: 2, s: "Million Dollar Quartet", p: "has part(s)", o: "Elvis Presley", isGT: true },
+      { id: 3, s: "Jailhouse Rock", p: "cast member", o: "Elvis Presley", isGT: true },
+      { id: 4, s: "Elvis Presley", p: "record label", o: "Sun Records", isGT: true },
+      { id: 5, s: "Elvis Presley", p: "genre", o: "rhythm and blues", isGT: true },
+      { id: 6, s: "Elvis Presley", p: "military unit", o: "32nd Cavalry Regiment", isGT: false },
+      { id: 7, s: "The King", p: "main subject", o: "Elvis Presley", isGT: false },
+      { id: 8, s: "Jim Morrison", p: "influenced by", o: "Elvis Presley", isGT: false },
+      { id: 9, s: "Elvis Presley", p: "award received", o: "Grammy Lifetime Achievement", isGT: false },
+      { id: 10, s: "Viva Las Vegas", p: "cast member", o: "Elvis Presley", isGT: false },
+    ];
+
+    let selectedIds = new Set();
+
+    function renderTriples() {
+      const container = document.getElementById('triples-container');
+      container.innerHTML = '';
+
+      sampleTriples.forEach(t => {
+        const isSelected = selectedIds.has(t.id);
+        const item = document.createElement('div');
+        item.className = `p-3 rounded-lg border cursor-pointer transition-all flex items-center justify-between ${
+          isSelected 
+            ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-400 dark:border-emerald-600 shadow-sm' 
+            : 'bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800 hover:border-slate-300'
+        }`;
+        
+        item.onclick = () => {
+          if (selectedIds.has(t.id)) {
+            selectedIds.delete(t.id);
+          } else {
+            selectedIds.add(t.id);
+          }
+          renderTriples();
+          calculateMetrics();
+        };
+
+        item.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="w-4 h-4 rounded border flex items-center justify-center ${isSelected ? 'bg-emerald-600 border-emerald-600 text-white' : 'border-slate-400'}">
+              ${isSelected ? '✓' : ''}
+            </span>
+            <span>
+              <span class="text-slate-900 dark:text-white font-semibold">(${t.s})</span>
+              <span class="text-emerald-600 dark:text-emerald-400 font-bold mx-1">-[${t.p}]-></span>
+              <span class="text-slate-700 dark:text-slate-300">(${t.o})</span>
+            </span>
+          </div>
+          <div>
+            ${t.isGT ? '<span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-300 font-sans">Ground Truth</span>' : '<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-500 font-sans">Distractor</span>'}
+          </div>
+        `;
+        container.appendChild(item);
+      });
+
+      document.getElementById('selected-count').innerText = selectedIds.size;
+    }
+
+    function calculateMetrics() {
+      const totalGT = sampleTriples.filter(t => t.isGT).length;
+      document.getElementById('gt-count').innerText = totalGT;
+
+      const selectedList = sampleTriples.filter(t => selectedIds.has(t.id));
+      const truePositives = selectedList.filter(t => t.isGT).length;
+      const totalSelected = selectedList.length;
+
+      const precision = totalSelected > 0 ? (truePositives / totalSelected) : 0;
+      const recall = totalGT > 0 ? (truePositives / totalGT) : 0;
+      const f1 = (precision + recall) > 0 ? (2 * precision * recall) / (precision + recall) : 0;
+
+      // Calculate Average Precision (AP)
+      let cumTruePositives = 0;
+      let sumPrecision = 0;
+      selectedList.forEach((item, index) => {
+        if (item.isGT) {
+          cumTruePositives++;
+          sumPrecision += (cumTruePositives / (index + 1));
+        }
+      });
+      const ap = totalGT > 0 ? (sumPrecision / totalGT) : 0;
+
+      document.getElementById('metric-precision').innerText = (precision * 100).toFixed(1) + '%';
+      document.getElementById('metric-recall').innerText = (recall * 100).toFixed(1) + '%';
+      document.getElementById('metric-f1').innerText = f1.toFixed(3);
+      document.getElementById('metric-map').innerText = ap.toFixed(3);
+    }
+
+    function selectPreset(preset) {
+      selectedIds.clear();
+      if (preset === 'all-gt') {
+        sampleTriples.filter(t => t.isGT).forEach(t => selectedIds.add(t.id));
+      } else if (preset === 'random') {
+        const shuffled = [...sampleTriples].sort(() => 0.5 - Math.random());
+        shuffled.slice(0, 4).forEach(t => selectedIds.add(t.id));
+      }
+      renderTriples();
+      calculateMetrics();
+    }
+
+    // Initialise playground
+    selectPreset('random');
+  </script>
+</body>
+</html>
